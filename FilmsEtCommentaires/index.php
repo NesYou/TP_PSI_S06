@@ -1,4 +1,6 @@
 <?php
+
+
   require_once('InstancierTwig.php');
   require_once('includes/dbconnect.php');
   $connexion = connect();
@@ -9,6 +11,6 @@
   $acteurs = get_acteurAll($connexion);
 
   echo $twig->render('index.html.twig', array(
-        'films' => $films
-        ,'acteurs' => $acteurs
+    'films' => $films
+    ,'acteurs' => $acteurs
   ));

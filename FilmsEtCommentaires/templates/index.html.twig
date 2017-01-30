@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="templates/styles/style.css">
 
   </head>
-  <body>
     {% block body %}
       <h1>Mon Blog</h1>
       <h2>Liste des films</h2>
@@ -24,7 +23,8 @@
              <br/><b>&nbsp;&nbsp;Film</b> : {{film.origine}}
              <br/><b>&nbsp;&nbsp;Genre</b> : {{film.genre}}
              <br/><b>&nbsp;&nbsp;Resumé</b> : {{film.resume}}
+             <br/>&nbsp;&nbsp;<a href="commentaire.php?idFilm={{film.id}}">Commentaire</a>
            </p>
        </div>
       {% endfor %}
-    {% endblock %}
+  {% endblock %}
