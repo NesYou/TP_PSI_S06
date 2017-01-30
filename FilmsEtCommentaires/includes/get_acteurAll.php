@@ -1,11 +1,10 @@
 <?php
-  function get_acteurAll($connexion, $idFilm) {
+  function get_acteurAll($connexion) {
     try {
       $requeteActeurs = <<<SQL
-        SELECT nom, prenom
+        SELECT nom, prenom, idFilm
         FROM Acteur
         INNER JOIN Artiste ON idActeur = Artiste.id
-        INNER JOIN Film WHERE Acteur.idFilm = Film.id
 SQL;
 
       $resultat = $connexion->prepare($requeteActeurs);

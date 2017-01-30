@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Mon blog - Films et commentaires</title>
     <link rel="stylesheet" href="templates/styles/style.css">
 
@@ -10,10 +10,21 @@
     {% block body %}
       <h1>Mon Blog</h1>
       <h2>Liste des films</h2>
-      {% for film in film %}
-        <div class="liste_film">
+      {% for film in films %}
+        <div class="inside_liste_film">
           <h2>{{film.titre}} - <i>Sortie le {{film.dateSortie|date('d/m/y')}} - Réalisé par {{film.prenom}} {{film.prenom}}</i></h2>
-          Acteurs : {% for acteur in acteurs %} {{acteur.prenom}} {{acteur.nom}} {% endfor %}
-        </div>
+            <p>
+              <b>&nbsp;&nbsp;Acteurs</b> :
+                {% for acteur in acteurs %}
+                  {% if film.id == acteur.idFilm %}
+                    {{acteur.prenom}} {{acteur.nom}},
+                  {% endif %}
+                {% endfor %}...
+
+             <br/><b>&nbsp;&nbsp;Film</b> : {{film.origine}}
+             <br/><b>&nbsp;&nbsp;Genre</b> : {{film.genre}}
+             <br/><b>&nbsp;&nbsp;Resumé</b> : {{film.resume}}
+           </p>
+       </div>
       {% endfor %}
     {% endblock %}
