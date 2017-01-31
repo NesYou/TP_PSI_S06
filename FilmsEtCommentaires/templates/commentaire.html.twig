@@ -6,18 +6,42 @@
     <p> <label for="Auteur">Auteur :</label>
      <input type="text" name="auteur" id="auteur" value="" maxlength="10" /> </p>
 
-    <p> <label for="Message">Message: </label>
+    <p> <label for="Message" style="vertical-align: top;">Message: </label>
       <textarea type="test" name="message" id="message" value="votre message ici"></textarea> </p>
 
     <p><input type="submit" value="Publier"></input> <input type="reset" value="Effacer"></input></p>
   </form>
   <h2>Film du blog</h2>
-  <p><a href="index.php">Retour à la liste des films.</a></p>
+  <p><a href="index.php">Retour à la liste des films</a></p>
 
-  <h2>Commentaires : </h2>
+  {% for film in films %}
+    {% if film.id == GET.idFilm %}
+      <div class="inside_liste_film">
+        <h2>{{film.titre}} - <i>Sortie le {{film.dateSortie|date('d/m/y')}} - Réalisé par {{film.prenom}} {{film.prenom}}</i></h2>
+          <p>
+            <b>&nbsp;&nbsp;Acteurs</b> :
+              {% for acteur in acteurs %}
+                {% if film.id == acteur.idFilm %}
+                  {{acteur.prenom}} {{acteur.nom}},
+                {% endif %}
+              {% endfor %}...
+
+            <br/><b>&nbsp;&nbsp;Film</b> : {{film.origine}}
+            <br/><b>&nbsp;&nbsp;Genre</b> : {{film.genre}}
+            <br/><b>&nbsp;&nbsp;Resumé</b> : {{film.resume}}
+            <br/>&nbsp;&nbsp;<a href="commentaire.php?idFilm={{film.id}}">Commentaire</a>
+          </p>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <h2>Commentaires</h2>
   {% for commentaire in commentaires %}
     {% if commentaire.idFilm == GET.idFilm %}
-      <br/>{{commentaire.contenu}}
+      <div class="inside_liste_film">
+        <h2>{{commentaire.auteur}} le {{commentaire.datePost|date('d/m/y')}} a {{commentaire.datePost|date('H')}}h{{commentaire.datePost|date('i')}}min{{commentaire.datePost|date('s')}}s </h2>
+        <br/>&nbsp;&nbsp;{{commentaire.contenu}}
+      </div>
     {% endif %}
   {% endfor %}
 {% endblock %}
