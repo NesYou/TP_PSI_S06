@@ -1,6 +1,4 @@
 <?php
-
-
   require_once('InstancierTwig.php');
   require_once('includes/dbconnect.php');
   $connexion = connect();

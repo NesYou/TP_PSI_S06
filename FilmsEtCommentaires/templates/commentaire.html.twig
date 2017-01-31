@@ -1,0 +1,23 @@
+{% extends "layout.html.twig" %}
+
+{% block body %}
+  <h2>Commentez</h2>
+  <form method="post" action="commentaire.php?idFilm={{GET.idFilm}}" id="monForm">
+    <p> <label for="Auteur">Auteur :</label>
+     <input type="text" name="auteur" id="auteur" value="" maxlength="10" /> </p>
+
+    <p> <label for="Message">Message: </label>
+      <textarea type="test" name="message" id="message" value="votre message ici"></textarea> </p>
+
+    <p><input type="submit" value="Publier"></input> <input type="reset" value="Effacer"></input></p>
+  </form>
+  <h2>Film du blog</h2>
+  <p><a href="index.php">Retour à la liste des films.</a></p>
+
+  <h2>Commentaires : </h2>
+  {% for commentaire in commentaires %}
+    {% if commentaire.idFilm == GET.idFilm %}
+      <br/>{{commentaire.contenu}}
+    {% endif %}
+  {% endfor %}
+{% endblock %}
