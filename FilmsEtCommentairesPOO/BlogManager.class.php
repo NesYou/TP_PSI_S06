@@ -27,22 +27,11 @@
 SQL;
       $resultat = $this->db->prepare($requete);
       $resultat->execute();
-      while($film = $resultat->fetch()){
+      while($film = $resultat->fetch(PDO::FETCH_ASSOC)){
         $artiste = new artiste(array($film['idMES'], $film['prenom'], $film['nom']));
-        $films[] = new film(
-          $id=$film['id'],
-          $titre=$film['titre'],
-          $dateSortie=$film['dateSortie'],
-          $genre=$film['genre'],
-          $origine=$film['origine'],
-          $resume=$film['resume'],
-          $idMES=$artiste->getId(),
-          $prenom=$artiste->getPrenom(),
-          $nom=$artiste->getNom()
-        );
+        $data = array($film['id'], $film['titre'], $film['dateSortie'], $film['genre'], $film['origine'], $film['resume']);
+        $films[] = new film($data);
       }
-
-
       return $films;
     }
   }
