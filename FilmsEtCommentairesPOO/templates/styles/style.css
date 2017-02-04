@@ -1,0 +1,20 @@
+h1 {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  background-color:	grey;
+  margin-bottom: -0.1pt;
+}
+
+h3 {
+  text-align: center;
+  background-color:	grey;
+}
+
+.inside_liste_film {
+  background-color: #c0c0c0;
+  margin-left: 50px;
+  margin-right: 30px;
+}
