@@ -1,5 +1,5 @@
 <?php
-  public class artiste {
+  class artiste {
 
     private $id;
     private $prenom;
@@ -20,13 +20,13 @@
       $this->hydrate($donnees);
     }
 
-    public function hydrate(array $donnees) {
-      foreach ($donnees as $key => $value):
-        $method = 'set' . ucfirst($key);
-        if (method_exists($this, $method)):
-          $this->$method($value);
-        endif;
-      endforeach;
+    public function hydrate($donnees) {
+      foreach ($donnees as $attribut => $valeur) {
+        $methode = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $attribut)));
+          if (is_callable(array($this, $methode))) {
+            $this->$methode($valeur);
+          }
+      }
     }
 
 }

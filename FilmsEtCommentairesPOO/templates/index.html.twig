@@ -2,22 +2,9 @@
 
 {% block body %}
   <h2>Liste des films</h2>
-    {% for film in film %}
+    {% for film in films %}
       <div class="inside_liste_film">
-        <h2>{{film.getTitre}} - <i>Sortie le {{film.dateSortie|date('d/m/y')}} - Réalisé par {{film.prenom}} {{film.prenom}}</i></h2>
-          <p>
-            <b>&nbsp;&nbsp;Acteurs</b> :
-              {% for acteur in acteurs %}
-                {% if film.id == acteur.idFilm %}
-                  {{acteur.prenom}} {{acteur.nom}},
-                {% endif %}
-              {% endfor %}...
-
-           <br/><b>&nbsp;&nbsp;Film</b> : {{film.origine}}
-           <br/><b>&nbsp;&nbsp;Genre</b> : {{film.genre}}
-           <br/><b>&nbsp;&nbsp;Resumé</b> : {{film.resume}}
-           <br/>&nbsp;&nbsp;<a href="commentaire.php?idFilm={{film.id}}">Commentaire</a>
-         </p>
+        <h2>{{film.getTitre}} - <i>Sortie le {{film.getDateSortie|date('d/m/y')}} - Réalisé par {{film.idMES.prenom}} {{film.idMES.nom}}</i></h2>
       </div>
     {% endfor %}
 {% endblock %}

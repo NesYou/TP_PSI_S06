@@ -1,5 +1,5 @@
 <?php
-  public class commentaire {
+  class commentaire {
 
     private $id;
     private $idFilm;

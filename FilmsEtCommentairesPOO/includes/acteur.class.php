@@ -1,19 +1,19 @@
 <?php
-  require_once('film.class.php');
-  require_once('artiste.class.php');
+  require_once ('film.class.php');
+  require_once ('artiste.class.php');
 
-  public class acteur {
+  class acteur {
 
     private $id;
     private $idFilm;
 
     //==================== Accesseurs ====================
-    public getId() { return $this->id; }
-    public getIdFilm() { return $this->idFilm; }
+    public function getId() { return $this->id; }
+    public function getIdFilm() { return $this->idFilm; }
 
     //==================== Mutateurs ====================
-    public setId(artiste $id) { $this->id = $id; }
-    public setIdFilm(film $idFilm) { $this->idFilm = $idFilm; }
+    public function setId(artiste $id) { $this->id = $id; }
+    public function setIdFilm(film $idFilm) { $this->idFilm = $idFilm; }
 
     public function __construct(array $donnees) {
       $this->hydrate($donnees);

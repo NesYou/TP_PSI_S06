@@ -1,10 +1,10 @@
 <?php
-  require_once('film.class.php');
-  require_once('commentaire.class.php');
-  require_once('artiste.class.php');
-  require_once('acteur.class.php');
+  require_once ('film.class.php');
+  require_once ('commentaire.class.php');
+  require_once ('artiste.class.php');
+  require_once ('acteur.class.php');
 
-  public class BlogManager {
+  class BlogManager {
 
     private $db;
 
@@ -16,32 +16,35 @@
       $this->db = $db;
     }
 
+    public function getDb() {
+      return $this->db;
+    }
+
     public function getListFilm() {
+      $film=array();
       $requete=<<<SQL
-      SELECT film.id, titre
+      SELECT film.id, titre, idMES
       , dateSortie
       , genre, origine, resume
       , prenom, nom
       FROM film JOIN artiste ON artiste.id = idMES
       ORDER BY dateSortie DESC
 SQL;
-      $resultat = $db->prepare($requete);
+      $resultat = $this->db->prepare($requete);
       $resultat->execute();
-      while($film = $resultat->fetch()):
-        $artiste = new artiste($film['idMES'], $film['prenom'], $film['nom']);
-        $films[] = new film(
-          $id=>$film['id'],
-          $titre=>$film['titre'],
-          $dateSortie=>$film['dateSortie'],
-          $genre=>$film['genre'],
-          $origine=>$film['origine'],
-          $resume=>$film['resume'],
-          $idMES=>$artiste.id,
-          $prenom=>$artiste.prenom,
-          $nom=>$artiste.nom
-        );
-
-
+      while($film = $resultat->fetch(PDO::FETCH_ASSOC)){
+        $artiste = new artiste(array('prenom'=>$film['prenom'], 'nom'=>$film['nom']));
+        $films[] = new film(array(
+                                  'id'=>$film['id'],
+                                  'titre'=>$film['titre'],
+                                  'dateSortie'=>$film['dateSortie'],
+                                  'genre'=>$film['genre'],
+                                  'origine'=>$film['origine'],
+                                  'resume'=>$film['resume'],
+                                  'idMES'=>$artiste
+                            ));
+      }
       return $films;
     }
-  }
+
+}
