@@ -10,8 +10,12 @@
   spl_autoload_register('chargerClasse');
 
   $manager = new BlogManager($connexion);
-  $film = $manager->getListFilm();
+  $films = $manager->getListFilm();
+  $acteurs = $manager->getActeur();
+  
+  
 
   echo $twig->render('index.html.twig', array(
-    'films' => $film
+    'films' => $films,
+    'acteurs' => $acteurs
   ));

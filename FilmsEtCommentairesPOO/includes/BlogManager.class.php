@@ -33,7 +33,10 @@ SQL;
       $resultat = $this->db->prepare($requete);
       $resultat->execute();
       while($film = $resultat->fetch(PDO::FETCH_ASSOC)){
-        $artiste = new artiste(array('prenom'=>$film['prenom'], 'nom'=>$film['nom']));
+        $artiste = new artiste(array(
+                                     'prenom'=>$film['prenom'],
+                                     'nom'=>$film['nom']
+                                    ));
         $films[] = new film(array(
                                   'id'=>$film['id'],
                                   'titre'=>$film['titre'],
@@ -42,9 +45,34 @@ SQL;
                                   'origine'=>$film['origine'],
                                   'resume'=>$film['resume'],
                                   'idMES'=>$artiste
-                            ));
+                                ));
       }
       return $films;
+    }
+    
+    public function getActeur() {
+        $lesActeurs = array();
+        $requete = <<<SQL
+        SELECT nom, prenom, idFilm
+        FROM Acteur
+        INNER JOIN Artiste ON idActeur = Artiste.id
+SQL;
+        $resultat = $this->db->prepare($requete);
+        $resultat->execute();
+        while($data = $resultat->fetch(PDO::FETCH_ASSOC)){
+            $artiste = new artiste(array(
+                                        'prenom'=>$data['prenom'],
+                                        'nom'=>$data['nom']
+                                        ));
+            $film = new film(array(
+                                  'id'=>$data['idFilm']
+                                  ));
+            $lesActeurs[] = new acteur(array(
+                                            'idActeur'=>$artiste,
+                                            'idFilm'=>$film
+                                            ));
+        }
+        return $lesActeurs;
     }
 
 }
