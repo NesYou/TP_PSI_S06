@@ -7,18 +7,15 @@
   class BlogManager {
 
     private $db;
-
-    public function __construct($db) {
-      $this->setDb($db);
-    }
-
-    public function setDb(PDO $db) {
-      $this->db = $db;
-    }
-
-    public function getDb() {
-      return $this->db;
-    }
+    
+    
+    public function __construct($db) { $this->setDb($db); }
+    
+    //==================== Accesseurs ====================
+    public function setDb(PDO $db) { $this->db = $db; }
+    
+    //==================== Mutateurs ====================
+    public function getDb() { return $this->db; }
 
     public function getListFilm() {
       $film=array();
@@ -55,7 +52,7 @@ SQL;
         $requete = <<<SQL
         SELECT nom, prenom, idFilm
         FROM Acteur
-        INNER JOIN Artiste ON idActeur = Artiste.id
+        JOIN Artiste ON idActeur = Artiste.id
 SQL;
         $resultat = $this->db->prepare($requete);
         $resultat->execute();
@@ -64,7 +61,7 @@ SQL;
                                         'prenom'=>$data['prenom'],
                                         'nom'=>$data['nom']
                                         ));
-            $film = new film(array(
+            $film = new film(array(                                  
                                   'id'=>$data['idFilm']
                                   ));
             $lesActeurs[] = new acteur(array(
@@ -74,5 +71,47 @@ SQL;
         }
         return $lesActeurs;
     }
-
+    
+    public function getCommentaire() {
+        $lesCommentaires = array();
+        $requeteCommentaires = <<<SQL
+        SELECT id, idFilm
+        , auteur, datePost, contenu    
+        FROM Commentaire
+        ORDER by datePost
+SQL;
+        $resultat = $this->db->prepare($requeteCommentaires);
+        $resultat->execute();
+        while($data = $resultat->fetch(PDO::FETCH_ASSOC)) {
+            $film = new film(array(
+                                    'id'=>$data['idFilm']                                   
+            ));
+            $lesCommentaires[] = new commentaire(array(
+                                                        'id'=>$data['id'],
+                                                        'auteur'=>$data['auteur'],
+                                                        'datePost'=>$data['datePost'],
+                                                        'contenu'=>$data['contenu'],
+                                                        'idFilm'=>$film
+            ));
+        }
+        return $lesCommentaires;
+    }
+    
+    
+    function addComment($idFilm, $auteur, $contenu) {
+        $addComment = <<<SQL
+        INSERT INTO commentaire (idFilm, auteur, datePost, contenu)
+        VALUES (:idFilm, :auteur, :datePost, :contenu)
+SQL;
+        $action = $this->db->prepare($addComment);
+        $action->bindValue(':auteur', $auteur, PDO::PARAM_STR);
+        $action->bindValue(':datePost', date('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $action->bindValue(':contenu', $contenu, PDO::PARAM_STR);
+        $action->bindValue(':idFilm', $idFilm, PDO::PARAM_STR);
+        
+        
+        
+        $action->execute();
+    }
 }
+

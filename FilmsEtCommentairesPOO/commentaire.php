@@ -2,22 +2,29 @@
   require_once('InstancierTwig.php');
   require_once('includes/dbconnect.php');
   $connexion = connect();
+  
+ function chargerClasse($classe) {
+    require_once dirname(__FILE__) . '/includes/' . $classe . '.class.php';
+  }
+  spl_autoload_register('chargerClasse');
 
-  require_once('includes/get_commentaire.php');
-  $commentaires = get_commentaire($connexion);
-  require_once('includes/get_filmAll.php');
-  $films = get_filmAll($connexion);
-  require_once('includes/get_acteurAll.php');
-  $acteurs = get_acteurAll($connexion);
+  
+  $manager = new BlogManager($connexion);
+  $films = $manager->getListFilm();
+  $acteurs = $manager->getActeur();
+  $commentaires = $manager->getCommentaire();
 
-  require_once('includes/add_comment.php');
   if(!empty($_POST['auteur']) or !empty($_POST['contenu'])){
-    $add_com = add_comment($connexion, $_GET['idFilm'], $_POST['auteur'], $_POST['message']);
+    $manager->addComment($_GET['idFilm'], $_POST['auteur'], $_POST['message']);
+    header('Location: commentaire.php?idFilm='.$_GET['idFilm']);
+    exit();
   }
-  else {
-    $add_com = "Echec!!";
+ /* else {
+   echo '<script language=javascript">
+            alert("Merci de remplir tous les champs du formulaire.");
+         </script>';
   }
-
+*/
 
   echo $twig->render('commentaire.html.twig', array(
     'GET' => $_GET,
@@ -25,5 +32,4 @@
     'commentaires' => $commentaires,
     'films' => $films,
     'acteurs' => $acteurs,
-    'add_com' => $add_com
   ));
