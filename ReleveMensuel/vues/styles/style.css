@@ -1,0 +1,76 @@
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    background-color: grey;
+    margin-bottom: -1px;
+}
+
+h3 {
+    text-align: center;
+    background-color: grey;
+}
+
+.liste_film {
+    background-color: #c0c0c0;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+.content_liste_film {
+    padding: 5px;
+}
+
+#monForm input, textarea {
+        width: 58%;
+        border: #CCC 1px solid;
+        margin-left: 1%;
+} 
+
+#monForm label {
+    background-color: #c0c0c0;
+    display: block;
+    width: 39%;
+    float: left;
+    letter-spacing: 1px;
+    text-align: right;
+    padding-right: 1%;
+}
+    
+#monForm input:hover {
+    background-color: #DDEEFF;
+    border: #999 1px solid;
+}
+
+#monForm textarea:hover {
+    background-color: #DDEEFF;
+    border: #999 1px solid;
+}
+
+#monForm input:focus {
+    background-color: #DDEEFF;
+    border: #999 1px solid;
+}
+
+#monForm select:focus{
+    background-color: #DDEEFF;
+    border: #999 1px solid;
+}
+
+#monForm {width: 30%;}
+
+#monForm fieldset:hover{background-color: #FFF;}
+
+#monForm label:hover {font-weight: bold;}
+    
+#monForm .form_label_nostyle {background: none;}
+
+#monForm input[type="submit"]{border: #DDEEFF 1px solid; width: 27%;}
+
+#monForm input[type="submit"]:hover{background-color: #66CC33;cursor: pointer;}
+
+#monForm input[type="reset"] {border: #DDEEFF 1px solid; width: 27%;}
+
+#monForm input[type="reset"]:hover {background-color: #E6484D;cursor: pointer;}
