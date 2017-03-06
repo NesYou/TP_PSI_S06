@@ -19,6 +19,10 @@ class Advert
         $this->categories = new ArrayCollection();
     }
     
+    /**
+   * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
+   */
+    private $applications;
     
     /**
      * @ORM\ManyToMany(targetEntity="OC\PlatformBundle\Entity\Category", cascade={"persist"})

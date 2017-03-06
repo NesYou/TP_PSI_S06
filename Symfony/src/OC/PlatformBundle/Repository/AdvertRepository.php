@@ -10,4 +10,69 @@ namespace OC\PlatformBundle\Repository;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findAll() {
+        
+        //Méthode 1 : En passant par l'EntityManager
+        $queryBuilder = $this->_em->createQueryBuilder()
+                ->select('a')
+                ->from($this->_entityName, 'a')
+        ;
+        // Dans un repository, $this->_entityName est le namespace de l'entité gérée
+        // Ici, il vaut donc OC\PlatformBundle\Entity\Advert
+        
+        
+        //Méthode 2 : en passant par le raccourci
+        $queryBuilder = $this->createQueryBuilder('a');
+        
+        //On récupère le query à partir du QueryBuilder
+        $query = $queryBuilder->getQuery();
+        //On récupère les resultats à partir de la query
+        $results = $query->getResult();
+        
+        return $results;
+        
+        
+
+        
+        
+    }
+
+    public function findByOne($id) {
+        $qb = $this->createQueryBuilder('a');
+        $qb
+            ->where('a.id = :id')
+            ->setParameter('id', $id)
+        ;
+        
+        return $qb
+                ->getQuery()
+                ->getResult()
+        ;
+    }
+    
+    public function findByAuthorAndDate($author, $year) {
+        $qb = $this->createQueryBuilder('a');
+        $qb->where('a.author = :author')
+                ->setParameter('author', $author)
+           ->andWhere('a.date < :year')
+                ->setParameter('year', $year)
+           ->orderBy('a.date', 'DESC')
+        ;
+        
+        return $qb
+                ->getQuery()
+                ->getResult()
+        ;
+    }
+    
+    public function whereCurrentYear(QuerryBuilder $qb) {
+        $qb
+            ->andWhere('a.date BETWEEN :start AND :end')
+            ->setParameters('start', DateTime(date('Y').'-01-01')) //Date entre le 1er janvier de cette année
+            ->setParameters('end'  , DateTime(date('Y').'-12-31')) //Et le 31 décembre de cette année
+        ;
+                
+    }
+    
 }
+
