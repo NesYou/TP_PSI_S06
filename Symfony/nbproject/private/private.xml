@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp64/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Controller/AdvertController.php</file>
-            <file>file:/C:/wamp64/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Entity/Advert.php</file>
-            <file>file:/C:/wamp64/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Repository/AdvertRepository.php</file>
-            <file>file:/C:/wamp64/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Entity/Application.php</file>
+            <file>file:/C:/wamp/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Resources/views/Advert/form.html.twig</file>
+            <file>file:/C:/wamp/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Resources/views/Advert/add.html.twig</file>
+            <file>file:/C:/wamp/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Controller/AdvertController.php</file>
+            <file>file:/C:/wamp/www/TP_PSI_S06/Symfony/src/OC/PlatformBundle/Form/AdvertType.php</file>
+            <file>file:/C:/wamp/www/TP_PSI_S06/Symfony/app/config/config.yml</file>
         </group>
     </open-files>
 </project-private>
