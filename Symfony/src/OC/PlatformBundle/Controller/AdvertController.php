@@ -19,17 +19,37 @@ use Symfony\Component\HttpFoundation\Response;
 class AdvertController extends Controller {
     
     public function testAction(){
-        $advert = new Advert();
-        $advert->setTitle("Recherche développeur !");
-        $advert->setAuthor("Jean");
-        $advert->setContent("Recherche un développeur !");
+//      $advert = new Advert();
+//      $advert->setTitle("Recherche développeur !");
+//      $advert->setAuthor("Jean");
+//      $advert->setContent("Recherche un développeur !");
+//
+//      $em = $this->getDoctrine()->getManager();
+//      $em->persist($advert);
+//      $em->flush(); // C'est à ce moment qu'est généré le slug
+//
+//      return new Response('Slug généré : '.$advert->getSlug());
+//      // Affiche « Slug généré : recherche-developpeur »
+        $advert = new Advert;
+        
+        $advert->setDate(new \Datetime());  // Champ « date » OK
+        $advert->setTitle('abc');           // Champ « title » incorrect : moins de 10 caractères
+        //$advert->setContent('blabla');    // Champ « content » incorrect : on ne le définit pas
+        $advert->setAuthor('A');            // Champ « author » incorrect : moins de 2 caractères
+        
+        // On récupère le service validator
+        $validator = $this->get('validator');
+        
+        // On déclenche la validation sur notre object
+        $listErrors = $validator->validate($advert);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($advert);
-        $em->flush(); // C'est à ce moment qu'est généré le slug
-
-        return new Response('Slug généré : '.$advert->getSlug());
-        // Affiche « Slug généré : recherche-developpeur »
+        // Si $listErrors n'est pas vide, on affiche les erreurs
+        if(count($listErrors) > 0) {
+        // $listErrors est un objet, sa méthode __toString permet de lister joliement les erreurs
+            return new Response((string) $listErrors);
+        } else {
+            return new Response("L'annonce est valide !");
+        }
     }
     
     public function indexAction($page) {
@@ -89,50 +109,36 @@ class AdvertController extends Controller {
             
     }
         
-     public function addAction(Request $request) {
-        // On crée un objet Advert
+    public function addAction(Request $request){
         $advert = new Advert();
-        $form = $this->createForm(AdvertType::class, $advert);
+        $form   = $this->get('form.factory')->create(AdvertType::class, $advert);
 
-        // Si la requête est en POST
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-          
-            // On enregistre notre objet $advert dans la base de données, par exemple
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($advert);
-            $em->flush();
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($advert);
+          $em->flush();
 
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+          $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
-            // On redirige vers la page de visualisation de l'annonce nouvellement créée
-            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
-    }
+          return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
+        }
 
-    // À ce stade, le formulaire n'est pas valide car :
-    // - Soit la requête est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
-    // - Soit la requête est de type POST, mais le formulaire contient des valeurs invalides, donc on l'affiche de nouveau
-    return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
-      'form' => $form->createView(),
-    ));
+        return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+          'form' => $form->createView(),
+        ));
   }
         
     public function editAction($id, Request $request) {
         
         $em = $this->getDoctrine()->getManager();    
         $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-        $form = $this->createForm(AdvertEditType::class, $advert);
-            
+        
         if(null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
-            
-//        $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
-//            
-//        foreach($listCategories as $category) {
-//            $advert->addCategory($category);
-//        }
-            
-            
+        
+        $form = $this->createForm(AdvertEditType::class, $advert);
+                 
         //Si la requête est en POST, c'est que le visiteur qui a soumis le formulaire
         if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             
@@ -140,7 +146,7 @@ class AdvertController extends Controller {
             $em->flush();
             
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée');
-            return $this->redirectToRoute('oc_platform_view', array('id' => $id));
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
             
         return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
@@ -149,22 +155,32 @@ class AdvertController extends Controller {
         ));
     }
         
-    public function deleteAction($id) {
-        
+    public function deleteAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
+
         $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-            
+
         if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+          throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
-            
-        foreach($advert->getCategories() as $category) {
-            $advert->removeCategory($category);
+
+        // On crée un formulaire vide, qui ne contiendra que le champ CSRF
+        // Cela permet de protéger la suppression d'annonce contre cette faille
+        $form = $this->get('form.factory')->create();
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+          $em->remove($advert);
+          $em->flush();
+
+          $request->getSession()->getFlashBag()->add('info', "L'annonce a bien été supprimée.");
+
+          return $this->redirectToRoute('oc_platform_home');
         }
-            
-        $em->flush();
-            
-        return $this->render('OCPlatformBundle:Advert:delete.html.twig');
+
+        return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
+          'advert' => $advert,
+          'form'   => $form->createView(),
+        ));
     }
         
     public function menuAction($limit) {
