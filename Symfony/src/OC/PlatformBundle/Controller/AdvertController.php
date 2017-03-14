@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
     
 class AdvertController extends Controller {
@@ -54,7 +55,7 @@ class AdvertController extends Controller {
     
     public function indexAction($page) {
                
-        $nbPerPage = 3;
+        $nbPerPage = 1;
         
         //Ici, on récupére la liste des annonces, puis on la passe au template
         $listAdverts = $this->getDoctrine()
@@ -66,7 +67,7 @@ class AdvertController extends Controller {
         $nbPages = ceil(count($listAdverts) / $nbPerPage);
         
         //Une page ne peut être négative
-        if($page > $nbPages) {
+        if($page < $nbPages) {
             throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
         }
                        
@@ -110,6 +111,13 @@ class AdvertController extends Controller {
     }
         
     public function addAction(Request $request){
+        
+        // On vérifie que l'utilisateur dispose bien du rôle ROLE_AUTEUR
+        //if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+            // Sinon on déclenche une exception « Accès interdit »
+        //    throw new AccessDeniedException('Accès limité aux auteurs.');
+        //}
+        
         $advert = new Advert();
         $form   = $this->get('form.factory')->create(AdvertType::class, $advert);
 

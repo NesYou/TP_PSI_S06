@@ -48,7 +48,7 @@ class Advert
    * @var string
    *
    * @ORM\Column(name="author", type="string", length=255)
-   * @Assert\Length(min=12)
+   * @Assert\Length(min=2)
    */
   private $author;
   /**

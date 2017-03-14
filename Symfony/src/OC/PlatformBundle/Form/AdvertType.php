@@ -33,7 +33,6 @@ class AdvertType extends AbstractType
         'class'         => 'OCPlatformBundle:Category',
         'choice_label'  => 'name',
         'multiple'      => true,
-        'expanded'     => true,
         /*'query_builder' => function(CategoryRepository $repository) use($pattern) {
           return $repository->getLikeQueryBuilder($pattern);
         }*/
